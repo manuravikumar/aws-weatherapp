@@ -1,10 +1,4 @@
-terraform {
-  backend "s3" {
-    bucket         = "your-terraform-state-bucket"
-    key            = "serverless-weatherapp/terraform.tfstate"
-    region         = "ap-southeast-2"
-    dynamodb_table = "terraform-locks"
-  }
+
 
   required_providers {
     aws = {
@@ -12,26 +6,19 @@ terraform {
       version = "~> 5.0"
     }
   }
-}
-
-provider "aws" {
-  region = "ap-southeast-2"
-}
 
 resource "aws_iam_role" "lambda_exec" {
   name = "lambda_exec_role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
-    Statement = [
-      {
-        Action = "sts:AssumeRole",
-        Effect = "Allow",
-        Principal = {
-          Service = "lambda.amazonaws.com"
-        }
+    Statement = [{
+      Action = "sts:AssumeRole",
+      Effect = "Allow",
+      Principal = {
+        Service = "lambda.amazonaws.com"
       }
-    ]
+    }]
   })
 }
 
@@ -61,10 +48,10 @@ resource "aws_api_gateway_resource" "weather_resource" {
 }
 
 resource "aws_api_gateway_method" "weather_method" {
-  rest_api_id   = aws_api_gateway_rest_api.weather_api.id
-  resource_id   = aws_api_gateway_resource.weather_resource.id
-  http_method   = "GET"
-  authorization = "NONE"
+  rest_api_id      = aws_api_gateway_rest_api.weather_api.id
+  resource_id      = aws_api_gateway_resource.weather_resource.id
+  http_method      = "GET"
+  authorization    = "NONE"
   api_key_required = true
 }
 
@@ -86,7 +73,7 @@ resource "aws_lambda_permission" "api_gateway_invoke" {
 }
 
 resource "aws_api_gateway_deployment" "weather_deployment" {
-  depends_on = [aws_api_gateway_integration.lambda_integration]
+  depends_on  = [aws_api_gateway_integration.lambda_integration]
   rest_api_id = aws_api_gateway_rest_api.weather_api.id
   stage_name  = "prod"
 }
@@ -100,7 +87,7 @@ resource "aws_api_gateway_usage_plan" "weather_plan" {
   }
 
   throttle {
-    rate_limit = 10
+    rate_limit  = 10
     burst_limit = 2
   }
 }
@@ -118,7 +105,7 @@ resource "aws_api_gateway_usage_plan_key" "weather_key_attachment" {
 
 resource "aws_cloudfront_distribution" "weather_cf" {
   origin {
-    domain_name = "${aws_api_gateway_rest_api.weather_api.id}.execute-api.ap-southeast-2.amazonaws.com"
+    domain_name = "${aws_api_gateway_rest_api.weather_api.id}.execute-api.us-east-1.amazonaws.com"
     origin_id   = "apigw-origin"
 
     custom_origin_config {
