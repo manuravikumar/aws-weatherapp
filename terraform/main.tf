@@ -1,12 +1,4 @@
 
-
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "~> 5.0"
-    }
-  }
-
 resource "aws_iam_role" "lambda_exec" {
   name = "lambda_exec_role"
 
