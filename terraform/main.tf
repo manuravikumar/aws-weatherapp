@@ -83,16 +83,11 @@ resource "aws_api_gateway_usage_plan" "weather_plan" {
   api_stages {
     api_id = aws_api_gateway_rest_api.weather_api.id
     stage  = aws_api_gateway_stage.weather_stage.stage_name
-
-    throttle {
-      rate_limit  = 10
-      burst_limit = 2
-    }
   }
 
-  quota {
-    limit  = 1000
-    period = "MONTH"
+  throttle_settings {
+    rate_limit  = 10
+    burst_limit = 2
   }
 }
 
