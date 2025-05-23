@@ -2,7 +2,7 @@ terraform {
   backend "s3" {
     bucket         = "myterraformstate"
     key            = "weather-api/terraform.tfstate"
-    region         = "ap-southeast-2"
+    region         = "us-east-1"
     dynamodb_table = "terraform-locks"
     encrypt        = true
   }
