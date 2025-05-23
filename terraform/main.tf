@@ -1,4 +1,5 @@
 
+
 resource "aws_iam_role" "lambda_exec" {
   name = "lambda_exec_role"
 
@@ -67,7 +68,13 @@ resource "aws_lambda_permission" "api_gateway_invoke" {
 resource "aws_api_gateway_deployment" "weather_deployment" {
   depends_on  = [aws_api_gateway_integration.lambda_integration]
   rest_api_id = aws_api_gateway_rest_api.weather_api.id
-  stage_name  = "prod"
+  description = "Deployment for Weather API"
+}
+
+resource "aws_api_gateway_stage" "weather_stage" {
+  stage_name    = "prod"
+  rest_api_id   = aws_api_gateway_rest_api.weather_api.id
+  deployment_id = aws_api_gateway_deployment.weather_deployment.id
 }
 
 resource "aws_api_gateway_usage_plan" "weather_plan" {
@@ -75,12 +82,17 @@ resource "aws_api_gateway_usage_plan" "weather_plan" {
 
   api_stages {
     api_id = aws_api_gateway_rest_api.weather_api.id
-    stage  = aws_api_gateway_deployment.weather_deployment.stage_name
+    stage  = aws_api_gateway_stage.weather_stage.stage_name
+
+    throttle {
+      rate_limit  = 10
+      burst_limit = 2
+    }
   }
 
-  throttle {
-    rate_limit  = 10
-    burst_limit = 2
+  quota {
+    limit  = 1000
+    period = "MONTH"
   }
 }
 
@@ -122,8 +134,8 @@ resource "aws_cloudfront_distribution" "weather_cf" {
       }
     }
 
-    allowed_methods  = ["GET", "HEAD", "OPTIONS"]
-    cached_methods   = ["GET", "HEAD"]
+    allowed_methods = ["GET", "HEAD", "OPTIONS"]
+    cached_methods  = ["GET", "HEAD"]
   }
 
   restrictions {
