@@ -12,13 +12,17 @@ jobs:
         working-directory: ./terraform
 
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v3
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: 1.7.5
+
+      - name: Zip Lambda Function
+        run: zip lambda.zip index.js
+        working-directory: ./terraform
 
       - name: Terraform Init
         run: terraform init
@@ -34,4 +38,3 @@ jobs:
 
       - name: Terraform Apply
         run: terraform apply -auto-approve -var-file="terraform.tfvars"
-        
