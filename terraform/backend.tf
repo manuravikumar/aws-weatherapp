@@ -1,6 +1,6 @@
 terraform {
   backend "s3" {
-    bucket         = "my-terraform-state-bucket"
+    bucket         = "myterraformstate"
     key            = "weather-api/terraform.tfstate"
     region         = "ap-southeast-2"
     dynamodb_table = "terraform-locks"
