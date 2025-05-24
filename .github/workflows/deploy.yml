@@ -37,3 +37,13 @@ jobs:
 
       - name: Terraform Apply
         run: terraform apply -auto-approve -var-file="terraform.tfvars"
+      
+      - name: Deploy index.html to S3
+        run: |
+          aws s3 cp frontend/index.html s3://my-weather-frontend-bucket/index.html --acl public-read
+
+      - name: Invalidate CloudFront Cache
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id YOUR_CLOUDFRONT_DISTRIBUTION_ID \
+            --paths "/index.html"
