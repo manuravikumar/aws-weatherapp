@@ -45,7 +45,7 @@ resource "aws_api_gateway_method" "weather_method" {
   resource_id      = aws_api_gateway_resource.weather_resource.id
   http_method      = "GET"
   authorization    = "NONE"
-  api_key_required = true
+  api_key_required = false
 }
 
 resource "aws_api_gateway_integration" "lambda_integration" {
