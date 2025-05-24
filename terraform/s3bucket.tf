@@ -1,10 +1,16 @@
 resource "aws_s3_bucket" "frontend" {
   bucket = "my-weather-frontend-bucket"
-  acl    = "public-read"
+}
 
-  website {
-    index_document = "index.html"
-    error_document = "index.html"
+resource "aws_s3_bucket_website_configuration" "frontend_website" {
+  bucket = aws_s3_bucket.frontend.id
+
+  index_document {
+    suffix = "index.html"
+  }
+
+  error_document {
+    key = "index.html"
   }
 }
 
