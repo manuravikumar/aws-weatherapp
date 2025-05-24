@@ -32,6 +32,14 @@ jobs:
       - name: Terraform Validate
         run: terraform validate
 
+      - name: Force Unlock Terraform State
+        run: |
+          # Initialize Terraform backend to ensure connection to state
+          terraform init -backend-config="bucket=myterraformstate" -backend-config="key=weather-api/terraform.tfstate" -backend-config="dynamodb_table=your-lock-table-name" # Replace with your S3 bucket and DynamoDB lock table name
+
+          # Force unlock the state
+          terraform force-unlock f564087b-8ab8-f9d5-5764-890b4ac00c14
+
       - name: Terraform Plan
         run: terraform plan -var-file="terraform.tfvars"
 
