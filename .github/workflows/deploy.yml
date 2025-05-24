@@ -33,10 +33,6 @@ jobs:
       - name: Terraform Validate
         run: terraform validate
 
-     
-      - name: Terraform Import S3 Bucket
-        run: terraform import aws_s3_bucket.frontend my-weather-frontend-bucket
-     
       - name: Terraform Plan
         run: terraform plan -var-file="terraform.tfvars"
 
