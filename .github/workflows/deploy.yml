@@ -26,6 +26,13 @@ jobs:
       - name: Zip Lambda Function
         run: zip lambda.zip index.js
 
+      - name: Force Unlock Terraform State
+        run: |
+          # Initialize Terraform backend to ensure connection to state
+          terraform init -backend-config="bucket=myterraformstate" -backend-config="key=weather-api/terraform.tfstate" -backend-config="dynamodb_table=terraform-locks" # Replace with your S3 bucket and DynamoDB lock table name
+
+          # Force unlock the states
+          terraform force-unlock -force 9e9001a7-6d4e-2eaf-cc94-f030230f0830
       - name: Terraform Init
         run: terraform init
 
