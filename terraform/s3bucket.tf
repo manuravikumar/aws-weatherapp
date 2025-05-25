@@ -4,9 +4,6 @@ resource "aws_s3_bucket" "frontend" {
 
   force_destroy = true
 
-  tags = {
-    Name = "weatherapp-frontend"
-  }
 }
 
 
