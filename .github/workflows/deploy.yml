@@ -44,7 +44,7 @@ jobs:
       - name: Deploy index.html to S3
         run: |
           aws s3 cp index.html s3://weatherfrontend-bucket/index.html 
-          aws s3 cp index.html s3://weatherfrontend-bucket/style.css
+          aws s3 cp index.html s3://weatherfrontend-bucket/styles.css
         working-directory: ./frontend
 
       - name: Invalidate CloudFront Cache
