@@ -1,6 +1,3 @@
-resource "aws_s3_bucket" "frontend" {
-  bucket = "my-weather-frontend-bucket"
-}
 
 resource "aws_s3_bucket_website_configuration" "frontend_website" {
   bucket = aws_s3_bucket.frontend.id
