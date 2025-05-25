@@ -1,6 +1,6 @@
 
 resource "aws_s3_bucket" "frontend" {
-  bucket = "my-weather-frontend-bucket"
+  bucket = "weatherfrontend-bucket"
 
   force_destroy = true
 
