@@ -106,6 +106,7 @@ resource "aws_cloudfront_distribution" "weather_cf" {
   origin {
     domain_name = "${aws_api_gateway_rest_api.weather_api.id}.execute-api.us-east-1.amazonaws.com"
     origin_id   = "apigw-origin"
+    origin_path = "/prod"
 
     custom_origin_config {
       origin_protocol_policy = "https-only"
